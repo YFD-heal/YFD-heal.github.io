@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>国风小博客</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Microsoft YaHei", "宋体", sans-serif;
+        }
+
+        body {
+            background-color: #FAF5EE;
+            color: #5C3A21;
+            font-size: 15px;
+            line-height: 1.8;
+            padding-bottom: 100px;
+        }
+
+        /* 头部国潮页眉 */
+        .blog-header {
+            background: linear-gradient(#A8201A, #8B1A15);
+            text-align: center;
+            padding: 25px 15px;
+        }
+
+        .blog-header h1 {
+            color: #F9EAD3;
+            font-size: 24px;
+            letter-spacing: 4px;
+            font-weight: normal;
+        }
+
+        .blog-header p {
+            color: #F0D9B5;
+            font-size: 13px;
+            margin-top: 6px;
+        }
+
+        /* 导航栏 */
+        .nav-bar {
+            display: flex;
+            justify-content: space-around;
+            background: #F3E4CD;
+            padding: 12px 0;
+            border-bottom: 1px solid #D9BC94;
+            position: sticky;
+            top: 0;
+            z-index: 99;
+        }
+
+        .nav-item {
+            color: #8B2323;
+            font-size: 14px;
+        }
+
+        .nav-item.active {
+            font-weight: bold;
+            border-bottom: 2px solid #A8201A;
+            padding-bottom: 3px;
+        }
+
+        .container {
+            padding: 15px;
+        }
+
+        /* 分类筛选栏 */
+        .cate-wrap {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 18px;
+        }
+
+        .cate-item {
+            padding: 5px 12px;
+            border-radius: 20px;
+            border: 1px solid #A8201A;
+            font-size: 13px;
+            color: #8B1A15;
+        }
+
+        .cate-item.active {
+            background: #A8201A;
+            color: #fff;
+        }
+
+        /* 发布文章表单 */
+        .publish-box {
+            background: #fff;
+            border-radius: 8px;
+            padding: 18px;
+            margin-bottom: 20px;
+            border: 1px solid #E8D9C3;
+            box-shadow: 0 2px 6px rgba(139, 26, 21, 0.08);
+        }
+
+        .publish-box h3 {
+            color: #8B1A15;
+            margin-bottom: 12px;
+            text-align: center;
+            letter-spacing: 2px;
+        }
+
+        select, input, textarea {
+            width: 100%;
+            border: 1px solid #D9BC94;
+            border-radius: 6px;
+            padding: 10px;
+            margin-bottom: 12px;
+            background: #FAF5EE;
+            outline: none;
+            font-size: 14px;
+        }
+
+        textarea {
+            min-height: 100px;
+            resize: none;
+        }
+
+        .submit-btn {
+            width: 100%;
+            background: #A8201A;
+            color: #fff;
+            border: none;
+            padding: 11px;
+            border-radius: 6px;
+            font-size: 15px;
+            letter-spacing: 2px;
+        }
+
+        /* 文章卡片 */
+        .article-card {
+            background: #fff;
+            border-radius: 8px;
+            padding: 18px;
+            margin-bottom: 16px;
+            border: 1px solid #E8D9C3;
+            box-shadow: 0 2px 6px rgba(139, 26, 21, 0.08);
+        }
+
+        .article-title {
+            font-size: 17px;
+            color: #8B1A15;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        .article-info {
+            font-size: 12px;
+            color: #A0826D;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .article-cate {
+            color: #A8201A;
+            border: 1px solid #A8201A;
+            font-size: 11px;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        .article-desc {
+            color: #6B4F3A;
+            font-size: 14px;
+        }
+
+        .btn-group {
+            margin-top: 12px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .edit-btn, .del-btn {
+            flex: 1;
+            text-align: center;
+            padding: 6px 0;
+            border-radius: 4px;
+            font-size: 13px;
+            border: none;
+        }
+
+        .edit-btn {
+            background: #E8C39E;
+            color: #5C3A21;
+        }
+
+        .del-btn {
+            background: #A8201A;
+            color: #fff;
+        }
+
+        .divider {
+            height: 1px;
+            background: linear-gradient(to right, transparent, #C8A988, transparent);
+            margin: 20px 0;
+        }
+
+        /* 编辑弹窗 */
+        .mask {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            z-index: 999;
+        }
+
+        .edit-pop {
+            width: 90%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%,-50%);
+            background: #FAF5EE;
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        /* 底部 */
+        .footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: #8B1A15;
+            text-align: center;
+            padding: 10px 0;
+            color: #F9EAD3;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <header class="blog-header">
+        <h1>山河随笔 · 国风小筑</h1>
+        <p>温一壶风月，写半生寻常</p>
+    </header>
+
+    <nav class="nav-bar">
+        <div class="nav-item active">首页</div>
+        <div class="nav-item">随笔</div>
+        <div class="nav-item">生活</div>
+        <div class="nav-item">关于</div>
+    </nav>
+
+    <div class="container">
+        <!-- 分类筛选 -->
+        <div class="cate-wrap">
+            <div class="cate-item active" data-cate="全部">全部</div>
+            <div class="cate-item" data-cate="随笔">随笔</div>
+            <div class="cate-item" data-cate="生活">生活</div>
+            <div class="cate-item" data-cate="感悟">感悟</div>
+        </div>
+
+        <!-- 发布文章表单 -->
+        <div class="publish-box">
+            <h3>📝 发布新随笔</h3>
+            <select id="artCate">
+                <option value="随笔">随笔</option>
+                <option value="生活">生活</option>
+                <option value="感悟">感悟</option>
+            </select>
+            <input type="text" id="artTitle" placeholder="请输入文章标题">
+            <textarea id="artContent" placeholder="请写下你的心事与感悟..."></textarea>
+            <button class="submit-btn" onclick="addArticle()">发布文章</button>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- 文章列表容器 -->
+        <div id="articleList"></div>
+    </div>
+
+    <!-- 编辑弹窗 -->
+    <div class="mask" id="editMask">
+        <div class="edit-pop">
+            <select id="editCate">
+                <option value="随笔">随笔</option>
+                <option value="生活">生活</option>
+                <option value="感悟">感悟</option>
+            </select>
+            <input type="text" id="editTitle" placeholder="修改标题">
+            <textarea id="editContent" placeholder="修改内容"></textarea>
+            <button class="submit-btn" onclick="saveEdit()">保存修改</button>
+        </div>
+    </div>
+
+    <div class="footer">
+        国风小博客 · 手机端专属 | 编辑/删除/分类筛选 © 2026
+    </div>
+
+    <script>
+        // 分类 & 当前筛选
+        let nowCate = "全部";
+        let editIndex = 0;
+
+        // 读取本地存储
+        let articleArr = JSON.parse(localStorage.getItem('blogData')) || [
+            {
+                title: '春日人间，温柔如常',
+                content: '人间草木，次第生长。不必追赶时光，慢慢生活，慢慢热爱，便是最好的模样。',
+                time: '2026-04-19',
+                cate: '生活'
+            },
+            {
+                title: '心有山海，静而不争',
+                content: '世事纷扰，守住内心一方清净。一念放下，万般从容，自在随心。',
+                time: '2026-04-15',
+                cate: '感悟'
+            }
+        ];
+
+        // 渲染文章
+        function renderArticle() {
+            const wrap = document.getElementById('articleList');
+            wrap.innerHTML = '';
+
+            // 分类筛选
+            let filterList = nowCate === "全部" 
+                ? articleArr 
+                : articleArr.filter(item => item.cate === nowCate);
+
+            filterList.forEach((item, index) => {
+                // 找原数组真实下标
+                let realIdx = articleArr.findIndex(x=>x.time===item.time&&x.title===item.title);
+                wrap.innerHTML += `
+                    <div class="article-card">
+                        <div class="article-title">${item.title}</div>
+                        <div class="article-info">
+                            <span>${item.time}</span>
+                            <span class="article-cate">${item.cate}</span>
+                        </div>
+                        <div class="article-desc">${item.content}</div>
+                        <div class="btn-group">
+                            <button class="edit-btn" onclick="openEdit(${realIdx})">编辑</button>
+                            <button class="del-btn" onclick="delArticle(${realIdx})">删除</button>
+                        </div>
+                    </div>
+                `;
+            })
+        }
+
+        // 新增文章
+        function addArticle() {
+            let title = document.getElementById('artTitle').value.trim();
+            let content = document.getElementById('artContent').value.trim();
+            let cate = document.getElementById('artCate').value;
+
+            if(!title || !content){
+                alert('标题和内容不能为空！');
+                return;
+            }
+
+            let now = new Date();
+            let timeStr = `${now.getFullYear()}-${(now.getMonth()+1).toString().padStart(2,0)}-${now.getDate().toString().padStart(2,0)}`;
+
+            articleArr.unshift({title,content,time:timeStr,cate});
+            localStorage.setItem('blogData', JSON.stringify(articleArr));
+
+            document.getElementById('artTitle').value = '';
+            document.getElementById('artContent').value = '';
+            renderArticle();
+            alert('发布成功！');
+        }
+
+        // 删除文章
+        function delArticle(idx) {
+            if(!confirm('确定要删除这篇文章吗？')) return;
+            articleArr.splice(idx,1);
+            localStorage.setItem('blogData', JSON.stringify(articleArr));
+            renderArticle();
+        }
+
+        // 打开编辑弹窗
+        function openEdit(idx) {
+            editIndex = idx;
+            let item = articleArr[idx];
+            document.getElementById('editCate').value = item.cate;
+            document.getElementById('editTitle').value = item.title;
+            document.getElementById('editContent').value = item.content;
+            document.getElementById('editMask').style.display = "block";
+        }
+
+        // 保存编辑
+        function saveEdit() {
+            articleArr[editIndex].cate = document.getElementById('editCate').value;
+            articleArr[editIndex].title = document.getElementById('editTitle').value.trim();
+            articleArr[editIndex].content = document.getElementById('editContent').value.trim();
+
+            if(!articleArr[editIndex].title || !articleArr[editIndex].content){
+                alert('标题内容不能为空！');
+                return;
+            }
+
+            localStorage.setItem('blogData', JSON.stringify(articleArr));
+            document.getElementById('editMask').style.display = "none";
+            renderArticle();
+            alert('修改成功！');
+        }
+
+        // 分类筛选点击
+        const cateItems = document.querySelectorAll('.cate-item');
+        cateItems.forEach(el=>{
+            el.addEventListener('click',()=>{
+                cateItems.forEach(c=>c.classList.remove('active'));
+                el.classList.add('active');
+                nowCate = el.dataset.cate;
+                renderArticle();
+            })
+        })
+
+        // 导航切换
+        const navItems = document.querySelectorAll('.nav-item');
+        navItems.forEach(item => {
+            item.addEventListener('click', () => {
+                navItems.forEach(i => i.classList.remove('active'));
+                item.classList.add('active');
+            });
+        });
+
+        // 初始化
+        renderArticle();
+    </script>
+</body>
+</html>
