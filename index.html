@@ -307,18 +307,60 @@
         let editIndex = 0;
         // 默认初始数据
         let articleArr = [
-            {
-                title: '春日人间，温柔如常',
-                content: '人间草木，次第生长。不必追赶时光，慢慢生活，慢慢热爱，便是最好的模样。',
-                time: '2026-04-19',
-                cate: '生活'
-            },
-            {
-                title: '心有山海，静而不争',
-                content: '世事纷扰，守住内心一方清净。一念放下，万般从容，自在随心。',
-                time: '2026-04-15',
-                cate: '感悟'
-            }
+{
+title:'practical life guide',
+cate:'随笔',
+time:'2026-05-06',
+content:'在或好或坏的环境中，都该维护对应的实用生活指南。'
+},
+{
+title:'道通天地，德行万物',
+cate:'生活',
+time:'2026-05-05',
+content:'用天地的道理来健康生活，以万物的方法来和睦共处。'
+},
+{
+title:'天下奔命于仁义，何其嚣嚣，其非人情，皆多骈旁枝之道。天下至正，守其性命之情。',
+cate:'生活',
+time:'2026-05-05',
+content:'正确的道路是健康生活，直爽自如；非强求所谓仁义。'
+},
+{
+title:'至人之用心若镜，不将不迎，应而不藏，胜物不伤。',
+cate:'生活',
+time:'2026-05-05',
+content:'心如明镜，随遇而安，保养自己，映照外物。'
+},
+{
+title:'得者时也，失者顺也，安时处顺',
+cate:'生活',
+time:'2026-05-05',
+content:'天胜于物，获得的可能只是应时而至，失去的可能只是顺化而去。安宁地处理得失，就能免受哀乐的侵扰，如古人所说解了倒悬之苦。'
+},
+{
+title:'形就心和，就不入，和不出，正吾身以达之。',
+cate:'生活',
+time:'2026-05-05',
+content:'人有过，可明示之，形就心和。同意外形和平且不妥协，保持内心平和且不张扬；做好自己的事，即可以正道引之。'
+},
+{
+title:'与其他生命交互，传递信息',
+cate:'生活',
+time:'2026-05-05',
+content:'与其他生命交互，向其传递信息，有利于健康生活，以免封闭精力于自身。总是想安全地与其他生命交互，比如养老鼠，甚至于独自打多人游戏。'
+},
+{
+title:'宜守令行事，忌迁令劝成',
+cate:'生活',
+time:'2026-05-05',
+content:'守令行事，总能有所收获，是一种体验享受。成功自然会快乐，失败也不会后悔。因为最终的结果就是收获，我亲身积累了一段经历并凭此成长。迁令劝成，总会一无所有，是一种浪费烦恼。成功也不会快乐，失败自然会后悔。因为最初的选择令人迷茫，我总是不知道当初的选择是对是错。'
+},
+{
+title:'whatever',
+cate:'随笔',
+time:'2026-05-01',
+content:'whatever'
+}
         ];
 
         // 渲染文章
@@ -398,12 +440,36 @@
         function exportFile(){
             const jsonStr = JSON.stringify(articleArr,null,2);
             const blob = new Blob([jsonStr],{type:'application/json'});
+
+
+            
             const a = document.createElement('a');
             a.href = URL.createObjectURL(blob);
             a.download = 'blog.json';
             a.click();
             URL.revokeObjectURL(a.href);
             alert('已保存为 blog.json 到下载文件夹！');
+
+
+            // 下载为 blog.txt
+            let text = '';
+
+            articleArr.forEach((article, index) => {
+                text += `\{\n`;
+                text += `title:\'${article.title}\'\,\n`;
+                text += `cate:\'${article.cate}\'\,\n`;
+                text += `time:\'${article.time}\'\,\n`;
+                text += `content:\'${article.content}\'\n`;
+                text += `\}\,\n`;
+            });
+            const blob2 = new Blob([text], { type: "text/plain" });
+            
+            const a2 = document.createElement('a');
+            a2.href = URL.createObjectURL(blob2);
+            a2.download = 'blog.txt';
+            a2.click();
+            URL.revokeObjectURL(a2.href);
+
         }
 
         // 导入：读取本地 blog.json
